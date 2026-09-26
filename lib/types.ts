@@ -14,10 +14,10 @@ export interface Workout {
   instructions: string[];
 }
 
-export type SortKey = "duration" | "caloriesBurned" | "rating";
+export type SortKey = "duration" | "calories" | "rating";
 
 export const SORT_LABELS: Record<SortKey, string> = {
   duration: "Duration",
-  caloriesBurned: "Calories",
+  calories: "Calories",
   rating: "Rating",
 };

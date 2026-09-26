@@ -6,7 +6,7 @@ import StatRow from "./StatRow";
 export default function WorkoutCard({ workout }: { workout: Workout }) {
   return (
     <Link
-      href={`/workouts/${workout.id}`}
+      href={`/workout/${workout.id}`}
       className="card-surface group flex flex-col overflow-hidden transition hover:border-accent/40 hover:-translate-y-0.5"
     >
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-base-700">

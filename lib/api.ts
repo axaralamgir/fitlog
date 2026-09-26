@@ -2,34 +2,40 @@ import { Workout } from "./types";
 
 export const API_BASE = "https://api.abcz.workers.dev/api/fitlog";
 
+function isWorkout(value: unknown): value is Workout {
+  if (!value || typeof value !== "object") return false;
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.id === "number" &&
+    typeof item.name === "string" &&
+    typeof item.image === "string" &&
+    Array.isArray(item.muscleGroups) &&
+    typeof item.equipment === "string" &&
+    typeof item.difficulty === "string" &&
+    typeof item.duration === "number" &&
+    typeof item.caloriesBurned === "number" &&
+    typeof item.sets === "number" &&
+    typeof item.reps === "string" &&
+    typeof item.rating === "number" &&
+    typeof item.description === "string" &&
+    Array.isArray(item.instructions)
+  );
+}
+
 export async function getAllWorkouts(): Promise<Workout[]> {
-  const res = await fetch(API_BASE, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error("Failed to fetch workouts");
-  }
-  return res.json();
+  const res = await fetch(API_BASE, { next: { revalidate: 300, tags: ["fitlog-workouts"] } });
+  if (!res.ok) throw new Error(`Workout API returned ${res.status}`);
+  const data: unknown = await res.json();
+  if (!Array.isArray(data) || !data.every(isWorkout)) throw new Error("Unexpected workout API response");
+  return data;
 }
 
 export async function getWorkoutById(id: string | number): Promise<Workout | null> {
-  try {
-    const res = await fetch(`${API_BASE}/${id}`, { cache: "no-store" });
-    if (res.ok) {
-      const data = await res.json();
-      // Some APIs return an array even for single lookups — normalize it.
-      const workout = Array.isArray(data) ? data[0] : data;
-      if (workout && workout.id) return workout;
-    }
-  } catch {
-    // fall through to the list-based lookup below
-  }
-
-  // Fallback: fetch the full list and find the match by id, in case the
-  // single-item endpoint behaves unexpectedly.
-  try {
-    const all = await getAllWorkouts();
-    const numericId = Number(id);
-    return all.find((w) => w.id === numericId) ?? null;
-  } catch {
-    return null;
-  }
+  const res = await fetch(`${API_BASE}/${id}`, { next: { revalidate: 300, tags: [`fitlog-workout-${id}`] } });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`Workout API returned ${res.status}`);
+  const data: unknown = await res.json();
+  const workout = Array.isArray(data) ? data[0] : data;
+  if (!isWorkout(workout)) throw new Error("Unexpected workout API response");
+  return workout;
 }

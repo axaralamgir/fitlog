@@ -23,7 +23,7 @@ export default function PlanCard({
     >
       <div className="flex items-center gap-4">
         <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-base-700">
-          <Image src={workout.image} alt={workout.name} fill className="object-cover" />
+          <Image src={workout.image} alt={workout.name} fill sizes="64px" className="object-cover" />
         </div>
         <div>
           <h3 className="font-display text-base font-bold uppercase tracking-wide">
@@ -40,7 +40,7 @@ export default function PlanCard({
       </div>
 
       <div className="flex items-center gap-2 self-end sm:self-auto">
-        <Link href={`/workouts/${workout.id}`} className="btn-secondary !px-4 !py-2 text-xs">
+        <Link href={`/workout/${workout.id}`} className="btn-secondary !px-4 !py-2 text-xs">
           View Details
         </Link>
         {onMarkDone && (
