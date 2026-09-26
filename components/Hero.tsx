@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export default function Hero() {
@@ -20,13 +19,12 @@ export default function Hero() {
           </p>
           <a href="#library" className="btn-primary mt-8">
             Browse Workouts
-            <ArrowRight className="h-4 w-4" />
           </a>
         </div>
 
         <div className="relative mx-auto aspect-square w-full max-w-sm">
           <Image
-            src="https://img.magnific.com/free-photo/3d-cartoon-fitness-man_23-2151691400.jpg?w=740"
+            src="/assets/banner.png"
             alt="FitLog hero illustration"
             fill
             sizes="(max-width: 1024px) 60vw, 400px"

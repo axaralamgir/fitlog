@@ -5,7 +5,13 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Search } from "lucide-react";
 import { SortKey, SORT_LABELS } from "@/lib/types";
 
-export default function LibraryControls({ query, sortKey }: { query: string; sortKey: SortKey }) {
+export default function LibraryControls({
+  query,
+  sortKey,
+}: {
+  query: string;
+  sortKey: SortKey;
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -17,18 +23,24 @@ export default function LibraryControls({ query, sortKey }: { query: string; sor
     if (search) params.set("search", search);
     if (sortKey !== "duration") params.set("sort", sortKey);
     const queryString = params.toString();
-    router.push(queryString ? `${pathname}?${queryString}#library` : `${pathname}#library`);
+    router.push(
+      queryString
+        ? `${pathname}?${queryString}#library`
+        : `${pathname}#library`,
+    );
   }
 
   function changeSort(value: SortKey) {
     const params = new URLSearchParams(window.location.search);
     if (value === "duration") params.delete("sort");
     else params.set("sort", value);
-    router.push(`${pathname}${params.toString() ? `?${params.toString()}` : ""}#library`);
+    router.push(
+      `${pathname}${params.toString() ? `?${params.toString()}` : ""}#library`,
+    );
   }
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
       <form onSubmit={submitSearch} className="relative w-full sm:max-w-xs">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
         <input
@@ -50,7 +62,9 @@ export default function LibraryControls({ query, sortKey }: { query: string; sor
             aria-label="Sort workouts"
           >
             {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (
-              <option key={key} value={key}>{SORT_LABELS[key]}</option>
+              <option key={key} value={key}>
+                {SORT_LABELS[key]}
+              </option>
             ))}
           </select>
           <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50" />
